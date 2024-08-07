@@ -1,11 +1,19 @@
 import { MongoClient, Db, Collection } from "mongodb";
 
+interface Playlist {
+	spotifyId: string;
+	name: string;
+	description: string;
+	public: boolean;
+}
+
 interface User {
 	spotifyId: string;
 	displayName: string;
 	email: string;
 	accessToken: string;
 	refreshToken: string;
+	playlists?: Playlist[];
 }
 
 let db: Db;

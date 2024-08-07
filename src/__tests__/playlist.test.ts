@@ -22,7 +22,7 @@ afterAll(async () => {
 });
 
 describe("POST /playlist/create", () => {
-	it("should create a new playlist for the user", async () => {
+	it("should create a new playlist for the user and save it in the database", async () => {
 		const usersCollection = getUsersCollection();
 		await usersCollection.insertOne({
 			spotifyId: "test_spotify_id",
@@ -50,7 +50,14 @@ describe("POST /playlist/create", () => {
 		});
 
 		expect(response.status).toBe(201);
-		expect(response.body.id).toBe("test_playlist_id");
+		expect(response.body.spotifyId).toBe("test_playlist_id");
 		expect(response.body.name).toBe("Test Playlist");
+
+		const user = await usersCollection.findOne({
+			spotifyId: "test_spotify_id",
+		});
+		expect(user).not.toBeNull();
+		expect(user?.playlists).toHaveLength(1);
+		expect(user?.playlists?.[0].name).toBe("Test Playlist");
 	});
 });

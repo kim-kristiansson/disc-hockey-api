@@ -21,7 +21,20 @@ router.post("/create", async (req: Request, res: Response) => {
 			description,
 			isPublic
 		);
-		res.status(201).json(playlist);
+
+		const newPlaylist = {
+			spotifyId: playlist.id,
+			name: playlist.name,
+			description: playlist.description,
+			public: playlist.public,
+		};
+
+		await usersCollection.updateOne(
+			{ spotifyId: userId },
+			{ $push: { playlists: newPlaylist } }
+		);
+
+		res.status(201).json(newPlaylist);
 	} catch (error) {
 		console.error("Error creating playlist:", error);
 		res.status(500).send("Error creating playlist");

@@ -3,6 +3,7 @@ import { connectToDatabase } from "./models/user";
 import authRouter from "./routes/auth";
 import playlistRouter from "./routes/playlist";
 import trackRouter from "./routes/track";
+import segmentRouter from "./routes/segment";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ connectToDatabase(mongoUri)
 		app.use("/auth", authRouter);
 		app.use("/playlist", playlistRouter);
 		app.use("/track", trackRouter);
+		app.use("/segment", segmentRouter);
 
 		app.listen(port, () => {
 			console.log(`Server is running on port ${port}`);

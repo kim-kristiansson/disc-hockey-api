@@ -1,16 +1,22 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import { MongoClient } from "mongodb";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-app.get("/", (req: Request, res: Response) => {
-	res.send("hello world");
+const client = new MongoClient("your_mongodb_connection_string");
+
+app.get("/", (req, res) => {
+	res.send("Hello World!");
 });
 
-if (require.main === module) {
-	app.listen(port, () => {
-		console.log(`Server is running at http://localhost:${port}`);
+client
+	.connect()
+	.then(() => {
+		app.listen(port, () => {
+			console.log(`Server is running on port ${port}`);
+		});
+	})
+	.catch((err) => {
+		console.error(err);
 	});
-}
-
-export default app;

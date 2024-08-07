@@ -22,7 +22,7 @@ afterAll(async () => {
 });
 
 describe("POST /track/add", () => {
-	it("should add tracks to the playlist", async () => {
+	it("should add tracks to the playlist and save them in the database", async () => {
 		const usersCollection = getUsersCollection();
 		await usersCollection.insertOne({
 			spotifyId: "test_spotify_id",
@@ -36,6 +36,7 @@ describe("POST /track/add", () => {
 					name: "Test Playlist",
 					description: "Test Description",
 					public: false,
+					tracks: [],
 				},
 			],
 		});
@@ -60,5 +61,17 @@ describe("POST /track/add", () => {
 
 		expect(response.status).toBe(201);
 		expect(response.body.snapshot_id).toBe("test_snapshot_id");
+
+		const user = await usersCollection.findOne({
+			spotifyId: "test_spotify_id",
+		});
+		expect(user).not.toBeNull();
+		const playlist = user?.playlists?.find(
+			(p) => p.spotifyId === "test_playlist_id"
+		);
+		expect(playlist).not.toBeNull();
+		expect(playlist?.tracks).toHaveLength(2);
+		expect(playlist?.tracks?.[0].uri).toBe("spotify:track:test_track_1");
+		expect(playlist?.tracks?.[1].uri).toBe("spotify:track:test_track_2");
 	});
 });

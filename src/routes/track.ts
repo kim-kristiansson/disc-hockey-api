@@ -19,6 +19,21 @@ router.post("/add", async (req: Request, res: Response) => {
 			playlistId,
 			trackUris
 		);
+
+		const tracks = trackUris.map((uri: string) => {
+			return {
+				uri: uri,
+				name: "", // Ideally, you'd retrieve and store the name, artist, and album from Spotify API
+				artist: "",
+				album: "",
+			};
+		});
+
+		await usersCollection.updateOne(
+			{ spotifyId: userId, "playlists.spotifyId": playlistId },
+			{ $push: { "playlists.$.tracks": { $each: tracks } } }
+		);
+
 		res.status(201).json(result);
 	} catch (error) {
 		console.error("Error adding tracks to playlist:", error);

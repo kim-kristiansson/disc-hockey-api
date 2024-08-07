@@ -1,6 +1,6 @@
 import request from "supertest";
 import express from "express";
-import authRouter from "../src/routes/auth";
+import authRouter from "../routes/auth";
 
 const app = express();
 app.use("/auth", authRouter);

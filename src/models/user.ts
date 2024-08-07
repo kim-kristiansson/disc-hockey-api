@@ -1,10 +1,16 @@
 import { MongoClient, Db, Collection } from "mongodb";
 
+interface Segment {
+	start: number;
+	end: number;
+}
+
 interface Track {
 	uri: string;
 	name: string;
 	artist: string;
 	album: string;
+	segments?: Segment[];
 }
 
 interface Playlist {

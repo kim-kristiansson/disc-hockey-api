@@ -1,10 +1,18 @@
 import { MongoClient, Db, Collection } from "mongodb";
 
+interface Track {
+	uri: string;
+	name: string;
+	artist: string;
+	album: string;
+}
+
 interface Playlist {
 	spotifyId: string;
 	name: string;
 	description: string;
 	public: boolean;
+	tracks?: Track[];
 }
 
 interface User {

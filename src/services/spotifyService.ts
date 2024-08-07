@@ -82,6 +82,27 @@ export const createPlaylist = async (
 	return response.data;
 };
 
+export const addTracksToPlaylist = async (
+	accessToken: string,
+	playlistId: string,
+	trackUris: string[]
+) => {
+	const response = await axios.post(
+		`https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+		{
+			uris: trackUris,
+		},
+		{
+			headers: {
+				Authorization: "Bearer " + accessToken,
+				"Content-Type": "application/json",
+			},
+		}
+	);
+
+	return response.data;
+};
+
 const generateRandomString = (length: number): string => {
 	let text = "";
 	const possible =

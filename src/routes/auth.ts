@@ -35,7 +35,9 @@ router.get("/callback", async (req: Request, res: Response) => {
 			{ upsert: true }
 		);
 
-		res.send("Login successful!");
+		res.redirect(
+			`${process.env.FRONTEND_REDIRECT_URI}/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`
+		);
 	} catch (error) {
 		console.error("Error getting Tokens:", error);
 		res.status(500).send("Error during authentication");

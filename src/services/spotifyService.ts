@@ -1,14 +1,18 @@
 import axios from "axios";
 
-const clientId = "your_client_id";
-const clientSecret = "your_client_secret";
-const redirectUri = "your_redirect_uri";
+const clientId = process.env.SPOTIFY_CLIENT_ID;
+const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+const redirectUri = process.env.REDIRECT_URI;
 const scopes = [
 	"playlist-modify-public",
 	"playlist-modify-private",
 	"user-read-private",
 	"user-read-email",
 ];
+
+if (!clientId || !clientSecret || !redirectUri) {
+	throw new Error("Missing environment variables for Spotify API");
+}
 
 export const getAuthorizeURL = (): string => {
 	const state = generateRandomString(16);
@@ -22,13 +26,15 @@ export const getAuthorizeURL = (): string => {
 export const getTokens = async (
 	code: string
 ): Promise<{ accessToken: string; refreshToken: string }> => {
+	const params = new URLSearchParams({
+		grant_type: "authorization_code",
+		code: code,
+		redirect_uri: redirectUri!,
+	});
+
 	const response = await axios.post(
 		"https://accounts.spotify.com/api/token",
-		new URLSearchParams({
-			grant_type: "authorization_code",
-			code: code,
-			redirect_uri: redirectUri,
-		}),
+		params,
 		{
 			headers: {
 				Authorization:

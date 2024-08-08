@@ -1,21 +1,21 @@
 import express from "express";
-import cors from "cors"; // Import the cors middleware
+import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config(); // Ensure this is called before any other imports
+
 import { connectToDatabase } from "./models/user";
 import authRouter from "./routes/auth";
 import playlistRouter from "./routes/playlist";
 import trackRouter from "./routes/track";
 import segmentRouter from "./routes/segment";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Use the cors middleware with specific configuration to allow credentials
 app.use(
 	cors({
-		origin: "http://localhost:1234", // Replace with your frontend URL
+		origin: "http://localhost:1234",
 		credentials: true,
 	})
 );

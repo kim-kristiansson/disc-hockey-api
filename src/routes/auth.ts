@@ -14,7 +14,11 @@ router.get("/login", (req: Request, res: Response) => {
 });
 
 router.get("/callback", async (req: Request, res: Response) => {
-	const { code } = req.query;
+	const { code, state } = req.query;
+
+	if (!code || !state) {
+		return res.status(400).send("Code or state is missing");
+	}
 
 	try {
 		const { accessToken, refreshToken } = await getTokens(code as string);
@@ -35,8 +39,9 @@ router.get("/callback", async (req: Request, res: Response) => {
 			{ upsert: true }
 		);
 
+		// Redirect to your frontend application with tokens
 		res.redirect(
-			`${process.env.FRONTEND_REDIRECT_URI}/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`
+			`${process.env.FRONTEND_REDIRECT_URI}?accessToken=${accessToken}&refreshToken=${refreshToken}`
 		);
 	} catch (error) {
 		console.error("Error getting Tokens:", error);

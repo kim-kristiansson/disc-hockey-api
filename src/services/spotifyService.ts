@@ -29,7 +29,7 @@ export const getTokens = async (
 	const params = new URLSearchParams({
 		grant_type: "authorization_code",
 		code: code,
-		redirect_uri: redirectUri!,
+		redirect_uri: redirectUri,
 	});
 
 	const response = await axios.post(
@@ -61,6 +61,17 @@ export const getSpotifyUser = async (accessToken: string) => {
 	});
 
 	return response.data;
+};
+
+const generateRandomString = (length: number): string => {
+	let text = "";
+	const possible =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+	for (let i = 0; i < length; i++) {
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return text;
 };
 
 export const createPlaylist = async (
@@ -107,15 +118,4 @@ export const addTracksToPlaylist = async (
 	);
 
 	return response.data;
-};
-
-const generateRandomString = (length: number): string => {
-	let text = "";
-	const possible =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-	for (let i = 0; i < length; i++) {
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
-	}
-	return text;
 };

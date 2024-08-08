@@ -4,11 +4,15 @@ import authRouter from "./routes/auth";
 import playlistRouter from "./routes/playlist";
 import trackRouter from "./routes/track";
 import segmentRouter from "./routes/segment";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const mongoUri = "your_mongodb_connection_string";
+// Use the environment variable for the MongoDB connection string
+const mongoUri = process.env.MONGODB_URI || "";
 
 app.use(express.json());
 
@@ -25,4 +29,5 @@ connectToDatabase(mongoUri)
 	})
 	.catch((err) => {
 		console.error("Failed to connect to the database", err);
+		console.log(`MongoDB URI: ${mongoUri}`);
 	});

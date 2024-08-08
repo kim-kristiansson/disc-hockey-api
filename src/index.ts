@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors"; // Import the cors middleware
 import { connectToDatabase } from "./models/user";
 import authRouter from "./routes/auth";
 import playlistRouter from "./routes/playlist";
@@ -11,10 +12,16 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Use the environment variable for the MongoDB connection string
-const mongoUri = process.env.MONGODB_URI || "";
-
+// Use the cors middleware with specific configuration to allow credentials
+app.use(
+	cors({
+		origin: "http://localhost:1234", // Replace with your frontend URL
+		credentials: true,
+	})
+);
 app.use(express.json());
+
+const mongoUri = process.env.MONGODB_URI || "";
 
 connectToDatabase(mongoUri)
 	.then(() => {
@@ -29,5 +36,4 @@ connectToDatabase(mongoUri)
 	})
 	.catch((err) => {
 		console.error("Failed to connect to the database", err);
-		console.log(`MongoDB URI: ${mongoUri}`);
 	});

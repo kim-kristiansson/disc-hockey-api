@@ -1,4 +1,6 @@
-// config/config.ts
+// src/config.ts
+import 'https://deno.land/x/dotenv/load.ts'
+
 export default {
     DB_USER: Deno.env.get('DB_USER') || 'postgres',
     DB_NAME: Deno.env.get('DB_NAME') || 'mydatabase',

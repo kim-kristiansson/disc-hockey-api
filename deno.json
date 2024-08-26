@@ -18,7 +18,7 @@
         "exclude": ["src/testdata/", "src/fixtures/**/*.ts"]
     },
     "tasks": {
-        "start": "deno run --allow-net --allow-read src/main.ts"
+        "start": "deno run --allow-read --allow-env --allow-net src/main.ts"
     },
     "imports": {},
     "exclude": ["dist/"]

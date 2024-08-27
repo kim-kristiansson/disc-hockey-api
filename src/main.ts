@@ -1,15 +1,10 @@
-import { Application } from 'https://deno.land/x/oak/mod.ts'
-import { connectToDatabase } from './database/connection.ts'
-import router from './routes.ts'
-import { errorHandler } from './middleware/errorHandler.ts'
-
-await connectToDatabase()
+import { Application } from './deps.ts'
+import authRoutes from './routes/authRoutes.ts'
 
 const app = new Application()
 
-app.use(errorHandler)
-app.use(router.routes())
-app.use(router.allowedMethods())
+app.use(authRoutes.routes())
+app.use(authRoutes.allowedMethods())
 
-console.log(`Server is running on http://localhost:8000`)
-await app.listen({ port: 8000 })
+console.log('Server running on http://localhost:3000')
+await app.listen({ port: 3000 })

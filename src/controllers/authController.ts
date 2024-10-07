@@ -22,6 +22,7 @@ export const handleSpotifyCallback = async (ctx: MyRouterContext) => {
 
         if (tokenData) {
             console.log('Access Token:', tokenData.access_token)
+            ctx.state.accessToken = tokenData.access_token
             ctx.response.body = 'Authentication successful!'
         } else {
             ctx.response.status = 400

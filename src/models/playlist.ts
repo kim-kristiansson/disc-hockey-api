@@ -1,6 +1,6 @@
 import { Track } from './track.ts'
 
-export interface Playlist {
+export type Playlist = {
     id: number
     tracks: Track[]
     userId: number

@@ -8,6 +8,9 @@ deno_modules/
 # Log files
 *.log
 
+# Database
+*.db
+
 # Local environment variables
 .env
 

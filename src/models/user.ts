@@ -1,6 +1,7 @@
 import { Playlist } from './playlist.ts'
 
-export interface User {
+export type User = {
     id: number
     playlists: Playlist[]
+    refreshToken: string
 }

@@ -47,7 +47,26 @@ router.get('/callback', async (ctx) => {
         return
     }
 
-    ctx.response.body = await tokenResponse.json()
+    const tokenData = await tokenResponse.json()
+    const accessToken = tokenData.access_token
+    // const refreshToken = tokenData.refresh_token
+
+    const userResponse = await fetch('https://api.spotify.com/v1/me', {
+        headers: {
+            Authorization: 'Bearer ' + accessToken,
+        },
+    })
+
+    if (!userResponse.ok) {
+        ctx.response.status = userResponse.status
+        ctx.response.body = 'failed to get user data'
+        return
+    }
+
+    const userData = await userResponse.json()
+    ctx.response.body = await userData.json()
+
+    // ctx.response.body = await tokenResponse.json()
 })
 
 export default router

@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String            @id @default(cuid())
+  refreshToken    String            @unique
+  hockeySoundSets HockeySoundSet[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model HockeySoundSet {
+  id                  String      @id @default(cuid())
+  name                String
+  userId              String
+  user                User        @relation(fields: [userId], references: [id])
+
+  penaltyPlaylists    PlayList[]  @relation("PenaltyPlaylists")
+  breakPlaylists      PlayList[]  @relation("BreakPlaylists")
+
+  homeTeamGoalTrackId String?     @unique
+  awayTeamGoalTrackId String?     @unique
+
+  homeTeamGoalTrack   Track?      @relation("HomeTeamGoalTrack", fields: [homeTeamGoalTrackId], references: [id])
+  awayTeamGoalTrack   Track?      @relation("AwayTeamGoalTrack", fields: [awayTeamGoalTrackId], references: [id])
+}
+
+model PlayList {
+  id                  String          @id @default(cuid())
+  name                String
+  tracks              Track[]
+
+  penaltyHockeySoundSet HockeySoundSet[] @relation("PenaltyPlaylists")
+  breakHockeySoundSet HockeySoundSet[] @relation("BreakPlaylists")
+}
+
+model Track {
+  id        String  @id @default(cuid())
+  spotifyId String  @unique
+  points    TrackPoint[]
+
+  playListid  String
+  playList    PlayList @relation(fields: [playListid], references: [id])
+
+  homeHockeySoundSet HockeySoundSet[] @relation("HomeTeamGoalTrack")
+  awayHockeySoundSet HockeySoundSet[] @relation("AwayTeamGoalTrack")
+}
+
+model TrackPoint {
+  id              String  @id @default(cuid())
+  startPoint      Int  
+  endPoint        Int     
+  trackId         String
+  track           Track   @relation(fields: [trackId], references: [id])
+}

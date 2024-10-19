@@ -37,6 +37,11 @@ namespace DiscHockey.Api.Controllers
 
                 var spotifyUser = await _spotifyService.GetCurrentUserAsync(tokenResponse.AccessToken);
 
+                if (spotifyUser == null)
+                {
+                    return BadRequest("Invalid Spotify token");
+                }
+
                 var user = await _userService.FindOrCreateUser(spotifyUser, tokenResponse.RefreshToken);
 
                 return Ok(user);

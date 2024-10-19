@@ -5,15 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscHockey.Api.Repositories
 {
-    public class UserRepository(AppDbContext _appDbContext) :IUserRepository
+    public class UserRepository(AppDbContext appDbContext) :BaseRepository<User>(appDbContext), IUserRepository
     {
-        public async Task AddUserAsync(User user)
-        {
-            ArgumentNullException.ThrowIfNull(user);
-
-            await _appDbContext.Users.AddAsync(user);
-        }
-
         public async Task<User?> FindUserBySpotifyAsyncId(string spotifyId)
         {
             if (string.IsNullOrEmpty(spotifyId))
@@ -21,19 +14,7 @@ namespace DiscHockey.Api.Repositories
                 throw new ArgumentNullException(nameof(spotifyId));
             }
 
-            return await _appDbContext.Users.FirstOrDefaultAsync(u => u.SpotifyId == spotifyId);
-        }
-
-        public async Task<bool> SaveChangesAsync()
-        {
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-
-        public void UpdateUser(User user)
-        {
-            ArgumentNullException.ThrowIfNull(user);
-
-            _appDbContext.Users.Update(user);
+            return await _context.Users.FirstOrDefaultAsync(u => u.SpotifyId == spotifyId);
         }
     }
 }

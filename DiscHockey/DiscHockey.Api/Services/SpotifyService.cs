@@ -17,10 +17,20 @@ namespace DiscHockey.Api.Services
                 new AuthorizationCodeTokenRequest(_clientId, _clientSecret, code, new Uri(_redirectUri)));
         }
 
-        public async Task<PrivateUser> GetCurrentUserAsync(string accessToken)
+        public async Task<PrivateUser?> GetCurrentUserAsync(string accessToken)
         {
-            _spotifyClient = new SpotifyClient(accessToken);
-            return await _spotifyClient.UserProfile.Current();
+            try
+            {
+                _spotifyClient = new SpotifyClient(accessToken);
+
+                var user = await _spotifyClient.UserProfile.Current();
+
+                return user;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public string GetSpotifyLoginUrl()

@@ -6,6 +6,6 @@ namespace DiscHockey.Api.Services.Interfaces
     {
         string GetSpotifyLoginUrl();
         Task<AuthorizationCodeTokenResponse> ExchangeCodeForTokenAsync(string code);
-        Task<PrivateUser> GetCurrentUserAsync(string accessToken);
+        Task<PrivateUser?> GetCurrentUserAsync(string accessToken);
     }
 }

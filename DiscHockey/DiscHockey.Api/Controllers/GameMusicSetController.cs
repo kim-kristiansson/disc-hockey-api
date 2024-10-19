@@ -1,4 +1,5 @@
-﻿using DiscHockey.Api.Dtos;
+﻿using DiscHockey.Api.Attributes;
+using DiscHockey.Api.Dtos;
 using DiscHockey.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
@@ -9,6 +10,8 @@ namespace DiscHockey.Api.Controllers
     [Route("api/[controller]")]
     public class GameMusicSetController(IGameMusicSetService gameMusicSetService, IUserService userService) :ControllerBase
     {
+        [HttpPost]
+        [SpotifyAuthorize]
         public async Task<IActionResult> Index([FromBody] RequestDtoGameMusicSet requestDtoGameMusicSet)
         {
             if (HttpContext.Items["SpotifyUser"] is not PrivateUser spotifyUser)

@@ -9,7 +9,7 @@ namespace DiscHockey.Api.Services
     {
         public async Task<User> FindOrCreateUser(PrivateUser privateUser, string refreshToken)
         {
-            var user = await _userRepository.FindUserBySpotifyAsyncId(privateUser.Id);
+            var user = await _userRepository.FindUserBySpotifyIdAsync(privateUser.Id);
 
             if (user == null)
             {
@@ -20,12 +20,12 @@ namespace DiscHockey.Api.Services
                     RefreshToken = refreshToken
                 };
 
-                await _userRepository.AddUserAsync(user);
+                await _userRepository.AddAsync(user);
             }
             else
             {
                 user.RefreshToken = refreshToken;
-                _userRepository.UpdateUser(user);
+                _userRepository.Update(user);
             }
 
             if (!await _userRepository.SaveChangesAsync())

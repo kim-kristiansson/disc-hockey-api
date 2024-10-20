@@ -2,7 +2,6 @@
 {
     public class ResponseDtoPlaylist
     {
-        public string Name { get; set; } = "";
         public List<ResponseDtoTrack> Tracks { get; set; } = [];
     }
 }

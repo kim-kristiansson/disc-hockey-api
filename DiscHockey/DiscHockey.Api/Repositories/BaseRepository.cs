@@ -50,6 +50,7 @@ namespace DiscHockey.Api.Repositories
             if (entity != null)
             {
                 _context.Set<TEntity>().Update(entity);
+                return;
             }
 
             throw new ArgumentNullException(nameof(entity));

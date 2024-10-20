@@ -2,8 +2,8 @@
 
 namespace DiscHockey.Api.Repositories.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserRepository :IBaseRepository<User>
     {
-        Task<User?> FindUserBySpotifyAsyncId(string spotifyId);
+        Task<User?> FindUserBySpotifyIdAsync(string spotifyId);
     }
 }

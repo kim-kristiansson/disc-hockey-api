@@ -5,6 +5,6 @@ namespace DiscHockey.Api.Services.Interfaces
 {
     public interface IGameMusicSetService
     {
-        GameMusicSet GetGameMusicSetAsync(RequestDtoGameMusicSet requestDtoGameMusicSet, Guid userId);
+        Task<GameMusicSet> CreateGameMusicSetAsync(RequestDtoGameMusicSet requestDtoGameMusicSet, Guid userId);
     }
 }

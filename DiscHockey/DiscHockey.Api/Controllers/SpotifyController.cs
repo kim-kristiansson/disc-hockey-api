@@ -5,21 +5,12 @@ namespace DiscHockey.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SpotifyController :ControllerBase
+    public class SpotifyController(ISpotifyService spotifyService, IUserService userService, IConfiguration configuration) :ControllerBase
     {
-        private readonly ISpotifyService _spotifyService;
-        private readonly IUserService _userService;
-
-        public SpotifyController(ISpotifyService spotifyService, IUserService userService)
-        {
-            _spotifyService = spotifyService;
-            _userService = userService;
-        }
-
         [HttpGet("login")]
         public IActionResult Login()
         {
-            var loginUrl = _spotifyService.GetSpotifyLoginUrl();
+            var loginUrl = spotifyService.GetSpotifyLoginUrl();
             return Redirect(loginUrl);
         }
 
@@ -33,18 +24,32 @@ namespace DiscHockey.Api.Controllers
 
             try
             {
-                var tokenResponse = await _spotifyService.ExchangeCodeForTokenAsync(code);
+                var tokenResponse = await spotifyService.ExchangeCodeForTokenAsync(code);
 
-                var spotifyUser = await _spotifyService.GetCurrentUserAsync(tokenResponse.AccessToken);
+                var spotifyUser = await spotifyService.GetCurrentUserAsync(tokenResponse.AccessToken);
 
                 if (spotifyUser == null)
                 {
                     return BadRequest("Invalid Spotify token");
                 }
 
-                var user = await _userService.FindOrCreateUser(spotifyUser, tokenResponse.RefreshToken);
+                var user = await userService.FindOrCreateUser(spotifyUser, tokenResponse.RefreshToken);
 
-                return Ok(user);
+                Response.Cookies.Append("spotifyAccessToken", tokenResponse.AccessToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    Expires = DateTimeOffset.UtcNow.AddHours(1)
+                });
+
+                var frontendRedirectUrl = configuration["Spotify:FrontendRedirectUrl"];
+
+                if (string.IsNullOrEmpty(frontendRedirectUrl))
+                {
+                    throw new Exception("Frontend redirect URL is required");
+                }
+
+                return Redirect(frontendRedirectUrl);
             }
             catch (Exception ex)
             {

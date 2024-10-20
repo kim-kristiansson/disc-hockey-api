@@ -7,7 +7,7 @@ namespace DiscHockey.Api.Repositories
 {
     public class UserRepository(AppDbContext appDbContext) :BaseRepository<User>(appDbContext), IUserRepository
     {
-        public async Task<User?> FindUserBySpotifyAsyncId(string spotifyId)
+        public async Task<User?> FindUserBySpotifyIdAsync(string spotifyId)
         {
             if (string.IsNullOrEmpty(spotifyId))
             {

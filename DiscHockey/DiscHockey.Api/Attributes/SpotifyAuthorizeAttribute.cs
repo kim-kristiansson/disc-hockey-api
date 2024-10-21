@@ -11,7 +11,7 @@ namespace DiscHockey.Api.Attributes
         {
             var spotifyService = context.HttpContext.RequestServices.GetService<ISpotifyService>();
 
-            var token = context.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var token = context.HttpContext.Request.Cookies["spotifyAccessToken"];
 
             if (string.IsNullOrEmpty(token))
             {
@@ -39,8 +39,9 @@ namespace DiscHockey.Api.Attributes
 
                 await next();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine($"Exception in SpotifyAuthorize: {ex.Message}");
                 context.Result = new StatusCodeResult(500);
             }
         }

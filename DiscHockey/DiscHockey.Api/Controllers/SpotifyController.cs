@@ -39,7 +39,16 @@ namespace DiscHockey.Api.Controllers
                 {
                     HttpOnly = true,
                     Secure = true,
+                    SameSite = SameSiteMode.None,
                     Expires = DateTimeOffset.UtcNow.AddHours(1)
+                });
+
+                Response.Cookies.Append("spotifyRefreshToken", tokenResponse.RefreshToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTimeOffset.UtcNow.AddDays(30)
                 });
 
                 var frontendRedirectUrl = configuration["Spotify:FrontendRedirectUrl"];

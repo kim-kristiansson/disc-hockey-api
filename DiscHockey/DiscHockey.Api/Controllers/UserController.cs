@@ -1,13 +1,14 @@
 ﻿using DiscHockey.Api.Attributes;
+using DiscHockey.Api.Mappers;
 using DiscHockey.Api.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
 
-namespace DiscHockey.Api.Data
+namespace DiscHockey.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController(IUserRepository userRepository) : ControllerBase
+    public class UserController(IUserRepository userRepository, Mapper mapper) :ControllerBase
     {
         [HttpGet("me")]
         [SpotifyAuthorize]
@@ -25,7 +26,9 @@ namespace DiscHockey.Api.Data
                 return NotFound("User not found");
             }
 
-            return Ok(user);
+            var userDto = mapper.MapToDto(user);
+
+            return Ok(userDto);
         }
     }
 }

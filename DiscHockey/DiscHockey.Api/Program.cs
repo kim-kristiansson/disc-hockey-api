@@ -1,5 +1,6 @@
 using DiscHockey.Api.Data;
 using DiscHockey.Api.Extensions;
+using DiscHockey.Api.Mappers;
 using DiscHockey.Api.Repositories;
 using DiscHockey.Api.Repositories.Interfaces;
 using DiscHockey.Api.Services;
@@ -12,6 +13,8 @@ builder.Services.AddSpotifyService(builder.Configuration);
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddSingleton<Mapper>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
